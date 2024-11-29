@@ -8,13 +8,13 @@ const Users: React.FC = () => {
 
     const [users, setUsers] = useState<User[]>([]);
 
-    let [results, setResults] = useState<User[]>([...users]);
+    const [results, setResults] = useState<User[]>([...users]);
 
     useEffect(() => {
-        setTimeout(() => {
-            AdminService.getUsers()
-            .then((res) => { setUsers(res); setResults(res); setLoading(false) })
-        }, 2000)
+        AdminService.getUsers()
+            .then((res) => { setUsers(res); setResults(res); })
+            .then(() => setTimeout(() => { setLoading(false) }, 2000));
+
     }, []);
 
     const handleInput = (ev: Event) => {
@@ -59,18 +59,18 @@ const Users: React.FC = () => {
                 {loading && (
                     [...Array<number>(10)].map((_, index) => (
                         <IonCard key={index}>
-                        <IonCardContent className='ion-no-padding'>
-                            <IonItem lines='none'>
-                                <IonLabel>
-                                    <IonSkeletonText animated={true}/>
-                                    <p><IonSkeletonText /></p>
-                                </IonLabel>
-                                <IonChip slot='end' color={'primary'}></IonChip>
-                            </IonItem>
-                        </IonCardContent>
-                    </IonCard>
+                            <IonCardContent className='ion-no-padding'>
+                                <IonItem lines='none'>
+                                    <IonLabel>
+                                        <IonSkeletonText animated={true} />
+                                        <p><IonSkeletonText /></p>
+                                    </IonLabel>
+                                    <IonChip slot='end' color={'primary'}></IonChip>
+                                </IonItem>
+                            </IonCardContent>
+                        </IonCard>
                     ))
-                )} 
+                )}
                 {results?.map((result) => (
                     <IonCard key={result.id}>
                         <IonCardContent className='ion-no-padding'>

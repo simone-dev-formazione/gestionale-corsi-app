@@ -1,9 +1,10 @@
 {
-  "name": "myApp",
+  "name": "Corsi",
   "private": true,
-  "version": "0.0.1",
+  "version": "0.0.5",
   "type": "module",
   "scripts": {
+    "native": "ionic capacitor sync",
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
@@ -35,6 +36,7 @@
     "zustand": "^5.0.1"
   },
   "devDependencies": {
+    "@capacitor/assets": "^3.0.5",
     "@capacitor/cli": "6.2.0",
     "@testing-library/dom": ">=7.21.4",
     "@testing-library/jest-dom": "^5.16.5",

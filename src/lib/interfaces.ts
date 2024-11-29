@@ -12,3 +12,16 @@ export interface User extends AddId {
     email: string;
     role: string;
 }
+
+export interface Category{
+    id: number;
+    name: string;
+}
+
+export interface Course {
+    id: number;
+    title: string;
+    description: string;
+    duration: number;
+    category: Category;
+}

@@ -1,11 +1,13 @@
 import { CapacitorHttp, HttpResponse } from "@capacitor/core";
+import platformService from "./platformService";
 
 class UserSevice {
     
     async login(data: {email: string; password: string}): Promise<string | boolean>{
         try{
+
             const response: HttpResponse = await CapacitorHttp.post({
-                url: 'http://10.0.2.2:3000/api/login',
+                url: platformService.getBaseAddressForPlatform() + 'api/login',
                 headers: { 'Content-Type': 'application/json' },
                 data: {
                     email: data.email,

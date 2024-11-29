@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-        <string>myApp</string>
+	<string>Corsi</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -45,5 +45,11 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>device uses camera to take photos</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>application stores photos in photo library</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>application gets photos from photo library</string>
 </dict>
 </plist>
