@@ -12,20 +12,27 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@capacitor/android": "6.2.0",
     "@capacitor/app": "6.0.2",
+    "@capacitor/camera": "^6.1.1",
     "@capacitor/core": "6.2.0",
     "@capacitor/haptics": "6.0.2",
+    "@capacitor/ios": "6.2.0",
     "@capacitor/keyboard": "6.0.3",
+    "@capacitor/preferences": "^6.0.3",
     "@capacitor/status-bar": "6.0.2",
     "@ionic/react": "^8.0.0",
     "@ionic/react-router": "^8.0.0",
     "@types/react-router": "^5.1.20",
     "@types/react-router-dom": "^5.3.3",
     "ionicons": "^7.0.0",
+    "jwt-decode": "^4.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router": "^5.3.4",
-    "react-router-dom": "^5.3.4"
+    "react-router-dom": "^5.3.4",
+    "swiper": "^11.1.15",
+    "zustand": "^5.0.1"
   },
   "devDependencies": {
     "@capacitor/cli": "6.2.0",
