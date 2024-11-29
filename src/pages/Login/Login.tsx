@@ -36,6 +36,10 @@ export function Login() {
         .then((res) => res.value && setLoggedInUser(res.value))
         .then((res) =>  res && router.push('/app', 'none'));
 
+        return () => {
+            setFormData({email: '', password: ''});
+        }
+
     }, [])
 
     const router = useIonRouter();

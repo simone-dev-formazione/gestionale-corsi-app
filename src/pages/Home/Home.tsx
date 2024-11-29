@@ -1,14 +1,26 @@
-import { IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonChip, IonContent, IonHeader, IonIcon, IonItem, IonMenuButton, IonPage, IonRefresher, IonRefresherContent, IonSkeletonText, IonText, IonTitle, IonToolbar } from "@ionic/react";
-import { useEffect, useState } from "react";
+import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonChip, IonContent, IonFooter, IonHeader, IonIcon, IonItem, IonMenuButton, IonModal, IonPage, IonRefresher, IonRefresherContent, IonSkeletonText, IonText, IonTitle, IonToolbar, useIonAlert, useIonToast } from "@ionic/react";
+import { useEffect, useRef, useState } from "react";
 import courseService from "../../services/courseService";
 import { Course } from "../../lib/interfaces";
-import { IonRefresherCustomEvent, RefresherCustomEvent } from "@ionic/core";
+import { RefresherCustomEvent } from "@ionic/core";
+import { createOutline, trashOutline } from "ionicons/icons";
+import { useUserStore } from "../../hooks/useUserStore";
 
 export function Home() {
+
+    const { user } = useUserStore();
 
     const [courses, setCourses] = useState<Course[]>([]);
 
     const [loading, setLoading] = useState<boolean>(true);
+
+    const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
+
+    const modal = useRef<HTMLIonModalElement>(null);
+
+    const [showAlert] = useIonAlert();
+
+    const [showToast] = useIonToast();
 
     useEffect(() => {
         courseService.getCourses()
@@ -20,6 +32,48 @@ export function Home() {
         const courses = await courseService.getCourses();
         setCourses(courses);
         e.detail.complete();
+    }
+
+    const handleCourseSelection = async (courseId: number) => {
+        const course = await courseService.getCourse(courseId);
+        if (!selectedCourse) {
+            setSelectedCourse(null);
+        }
+        setSelectedCourse(course);
+    }
+
+    const handleCloseModal = () => {
+        modal?.current?.dismiss();
+        setSelectedCourse(null);
+    }
+
+    const handleDelete = (courseId: number) => {
+        showAlert({
+            header: 'Delete',
+            message: 'Do you really want to delete the course?',
+            buttons: [
+                {
+                    text: 'No',
+                    role: 'cancel'
+                },
+                {
+                    text: 'Yes',
+                    handler: async () => {
+                        const result = await courseService.deleteCourse(courseId);
+                        if (!result) {
+                            return showToast({
+                                message: 'Error',
+                                color: 'danger',
+                                duration: 2000
+                            })
+                        }
+                        const courses = await courseService.getCourses();
+                        setCourses(courses);
+                        handleCloseModal();
+                    }
+                }
+            ]
+        });
     }
 
     return (
@@ -68,7 +122,7 @@ export function Home() {
                             :
                             (
                                 courses.map(course => (
-                                    <IonCard key={course.id}>
+                                    <IonCard key={course.id} onClick={() => { handleCourseSelection(course.id) }}>
                                         <IonCardHeader>
                                             <IonCardTitle>{course.title} <IonChip color={'primary'}>{course.category.name}</IonChip></IonCardTitle>
                                         </IonCardHeader>
@@ -85,6 +139,44 @@ export function Home() {
                             )
                     )
                 }
+                <IonModal ref={modal} isOpen={selectedCourse !== null}>
+                    <IonHeader>
+                        <IonToolbar>
+                            <IonButtons slot="end">
+                                <IonButton onClick={handleCloseModal}>Close</IonButton>
+                            </IonButtons>
+                        </IonToolbar>
+                    </IonHeader>
+                    <IonContent className="ion-padding">
+                        <IonCard>
+                            <IonCardHeader>
+                                <IonCardTitle>{selectedCourse?.title} <IonChip color={'primary'}>{selectedCourse?.category.name}</IonChip></IonCardTitle>
+                            </IonCardHeader>
+                            <IonCardContent>
+                                <IonItem>
+                                    <IonText>{selectedCourse?.duration} ore</IonText>
+                                </IonItem>
+                                <IonItem>
+                                    <IonText>{selectedCourse?.description}</IonText>
+                                </IonItem>
+                            </IonCardContent>
+                        </IonCard>
+                        {user && user.role === 'admin' ? (
+                            <>
+                                <IonButton expand='block' size="default" shape="round">
+                                    <IonIcon icon={createOutline} />
+                                </IonButton>
+                                <IonButton expand="block" size="default" shape="round" onClick={() => handleDelete(selectedCourse?.id!)}>
+                                    <IonIcon icon={trashOutline} />
+                                </IonButton>
+                            </>
+                        )
+                            :
+                            (<></>)
+                        }
+
+                    </IonContent>
+                </IonModal>
             </IonContent>
         </IonPage>
     );

@@ -25,3 +25,10 @@ export interface Course {
     duration: number;
     category: Category;
 }
+
+export interface RegisterRequest {
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+}
