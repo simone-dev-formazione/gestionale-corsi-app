@@ -1,4 +1,4 @@
-import { IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonItem, IonMenu, IonMenuToggle, IonPage, IonRouterOutlet, IonSplitPane, IonTitle, IonToolbar } from "@ionic/react";
+import { IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonItem, IonMenu, IonMenuToggle, IonPage, IonRouterOutlet, IonSplitPane, IonTitle, IonToolbar, useIonViewWillEnter } from "@ionic/react";
 import { useIonRouter } from "@ionic/react";
 import { homeOutline, hammerOutline, logOutOutline, peopleOutline } from "ionicons/icons";
 import { Redirect, Route } from "react-router";
@@ -8,6 +8,9 @@ import { useUserStore } from "../../hooks/useUserStore";
 import AuthService from "../../services/authService";
 import Users from "../Users/Users";
 import { useIonAlert } from "@ionic/react";
+import './Menu.css';
+import { Preferences } from "@capacitor/preferences";
+import { useThemeStore } from "../../hooks/useThemeStore";
 
 export function Menu() {
 
@@ -16,6 +19,18 @@ export function Menu() {
     const { user, unsetLoggedInUser } = useUserStore();
 
     const [showAlert] = useIonAlert();
+
+    const { setGlobalTheme } = useThemeStore();
+
+    useIonViewWillEnter(() => {
+        Preferences.get({
+            key: 'dark'
+        })
+            .then((t) => {
+                t.value === 'true' && document.documentElement.classList.add('ion-palette-dark');
+                setGlobalTheme(t.value === 'true');
+            })
+    });
 
     const handleLogout = async () => {
         showAlert({
@@ -46,51 +61,51 @@ export function Menu() {
 
     return (
         <IonPage>
-            <IonSplitPane contentId="main">
-                <IonMenu contentId="main">
-                    <IonHeader>
-                        <IonToolbar color={'secondary'}>
-                            <IonTitle>Hello, {user?.firstName}</IonTitle>
-                        </IonToolbar>
-                    </IonHeader>
-                    <IonContent className="ion-padding">
-                        {paths?.map((path, index) => (
-                            <IonMenuToggle key={index} autoHide={false}>
-                                <IonItem detail={true} routerLink={path.url} routerDirection="none">
-                                    <IonIcon icon={path.icon} className="ion-margin-end" />
-                                    {path.name}
+            {/* <IonSplitPane contentId="main"> */}
+            <IonMenu contentId="main">
+                <IonHeader>
+                    <IonToolbar color={'secondary'}>
+                        <IonTitle>Hello, {user?.firstName}</IonTitle>
+                    </IonToolbar>
+                </IonHeader>
+                <IonContent className="ion-padding">
+                    {paths?.map((path, index) => (
+                        <IonMenuToggle key={index} autoHide={false}>
+                            <IonItem detail={true} routerLink={path.url} routerDirection="none" className="menu-items">
+                                <IonIcon icon={path.icon} className="ion-margin-end" />
+                                {path.name}
+                            </IonItem>
+                        </IonMenuToggle>
+                    ))}
+                    {
+                        user?.role === 'admin' && (
+                            <IonMenuToggle autoHide={false}>
+                                <IonItem detail={true} routerLink={'/app/admin/users'} routerDirection="none">
+                                    <IonIcon icon={peopleOutline} className="ion-margin-end" />
+                                    [Admin] Users
                                 </IonItem>
                             </IonMenuToggle>
-                        ))}
-                        {
-                            user?.role === 'admin' && (
-                                <IonMenuToggle autoHide={false}>
-                                    <IonItem detail={true} routerLink={'/app/admin/users'} routerDirection="none">
-                                        <IonIcon icon={peopleOutline} className="ion-margin-end" />
-                                        [Admin] Users
-                                    </IonItem>
-                                </IonMenuToggle>
 
-                            )
-                        }
-                        <IonMenuToggle autoHide={false} >
-                            <IonButton expand='block' onClick={handleLogout}>
-                                <IonIcon icon={logOutOutline} className="ion-margin-end" />
-                                Logout
-                            </IonButton>
-                        </IonMenuToggle>
-                    </IonContent>
-                </IonMenu>
+                        )
+                    }
+                    <IonMenuToggle autoHide={false} >
+                        <IonButton expand='block' onClick={handleLogout}>
+                            <IonIcon icon={logOutOutline} className="ion-margin-end" />
+                            Logout
+                        </IonButton>
+                    </IonMenuToggle>
+                </IonContent>
+            </IonMenu>
 
-                <IonRouterOutlet id="main">
-                    <Route exact path={'/app/list'} component={Home} />
-                    <Route path={'/app/settings'} component={Settings} />
-                    <Route path={'/app/admin/users'} component={Users} />
-                    <Route exact path={'/app'}>
-                        <Redirect to={'/app/list'} />
-                    </Route>
-                </IonRouterOutlet>
-            </IonSplitPane>
+            <IonRouterOutlet id="main">
+                <Route exact path={'/app/list'} component={Home} />
+                <Route path={'/app/settings'} component={Settings} />
+                <Route exact path={'/app/admin/users'} component={Users} />
+                <Route exact path={'/app'}>
+                    <Redirect to={'/app/list'} />
+                </Route>
+            </IonRouterOutlet>
+            {/* </IonSplitPane> */}
         </IonPage>
     );
 }

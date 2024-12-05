@@ -1,16 +1,17 @@
 import { IonButtons, IonCard, IonCardContent, IonChip, IonContent, IonHeader, IonItem, IonLabel, IonList, IonMenuButton, IonPage, IonRefresher, IonRefresherContent, IonSearchbar, IonSkeletonText, IonTitle, IonToolbar, RefresherCustomEvent } from '@ionic/react';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import AdminService from '../../services/adminService';
 import { User } from '../../lib/interfaces';
+import { useIonViewWillEnter } from '@ionic/react';
 
 const Users: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(true);
 
     const [users, setUsers] = useState<User[]>([]);
 
-    const [results, setResults] = useState<User[]>([...users]);
+    const [results, setResults] = useState<User[]>([]);
 
-    useEffect(() => {
+    useIonViewWillEnter(() => {
         AdminService.getUsers()
             .then((res) => { setUsers(res); setResults(res); })
             .then(() => setTimeout(() => { setLoading(false) }, 2000));

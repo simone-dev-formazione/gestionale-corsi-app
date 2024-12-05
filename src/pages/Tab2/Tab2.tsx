@@ -1,7 +1,37 @@
-import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import React from 'react';
+import { IonButtons, IonContent, IonHeader, IonItem, IonMenuButton, IonPage, IonTitle, IonToggle, IonToolbar, ToggleCustomEvent, useIonViewWillEnter } from '@ionic/react';
+import React, { useState } from 'react';
+import { useThemeStore } from '../../hooks/useThemeStore';
+import { Preferences } from '@capacitor/preferences';
 
 const Tab2: React.FC = () => {
+
+    const {theme, setGlobalTheme} = useThemeStore();
+
+    const [darkState, setDarkState] = useState<boolean>(false);
+
+    useIonViewWillEnter(() => {
+        setDarkState(theme);
+    });
+
+    const handleToggle = async () => {
+        if(!darkState){
+            document.documentElement.classList.add('ion-palette-dark');
+            setGlobalTheme(true);
+            setDarkState(true);
+            await Preferences.set({
+                key: 'dark',
+                value: 'true'
+            }) }
+        else{
+            document.documentElement.classList.remove('ion-palette-dark');
+            setGlobalTheme(false);
+            setDarkState(false);
+            await Preferences.set({
+                key: 'dark',
+                value: 'false'
+            });
+        }
+    }
 
     return (
         <IonPage>
@@ -10,11 +40,13 @@ const Tab2: React.FC = () => {
                     <IonButtons slot="start">
                         <IonMenuButton />
                     </IonButtons>
-                    <IonTitle>Tab2</IonTitle>
+                    <IonTitle>Settings</IonTitle>
                 </IonToolbar>
             </IonHeader>
             <IonContent className="ion-padding">
-                UI goes here...
+                <IonItem>
+                    <IonToggle checked={darkState} onIonChange={handleToggle}>Dark Mode</IonToggle>
+                </IonItem>
             </IonContent>
         </IonPage>
     );

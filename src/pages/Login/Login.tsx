@@ -1,4 +1,4 @@
-import { IonButton, IonCard, IonCardContent, IonCol, IonContent, IonFooter, IonGrid, IonHeader, IonIcon, IonInput, IonPage, IonRow, IonTitle, IonToolbar } from "@ionic/react";
+import { IonButton, IonCard, IonCardContent, IonCol, IonContent, IonFooter, IonGrid, IonHeader, IonIcon, IonImg, IonInput, IonInputPasswordToggle, IonPage, IonRow, IonTitle, IonToolbar, useIonViewWillLeave } from "@ionic/react";
 import { logInOutline, personCircleOutline } from 'ionicons/icons';
 import IonicLogo from '../../assets/images/ionic-logo.png'
 import { useIonRouter } from "@ionic/react";
@@ -10,12 +10,13 @@ import { InputInputEventDetail, IonInputCustomEvent } from "@ionic/core";
 import UserService from "../../services/userService";
 import { useUserStore } from "../../hooks/useUserStore";
 import { useIonToast } from "@ionic/react";
+import { useIonViewWillEnter } from "@ionic/react";
 
 export function Login() {
 
-    const {user, setLoggedInUser} = useUserStore();
+    const { user, setLoggedInUser } = useUserStore();
 
-    const [formData, setFormData] = useState<{email: string; password: string}>({email: '', password:''})
+    const [formData, setFormData] = useState<{ email: string; password: string }>({ email: '', password: '' })
 
     const [introShown, setIntroShown] = useState<boolean>(true);
 
@@ -23,7 +24,7 @@ export function Login() {
 
     const [showToast] = useIonToast();
 
-    useEffect(() => {
+    useIonViewWillEnter(() => {
         Preferences.get({
             key: 'introShown'
         })
@@ -33,30 +34,30 @@ export function Login() {
         Preferences.get({
             key: 'token'
         })
-        .then((res) => res.value && setLoggedInUser(res.value))
-        .then((res) =>  res && router.push('/app', 'none'));
-
-        return () => {
-            setFormData({email: '', password: ''});
-        }
+            .then((res) => res.value && setLoggedInUser(res.value))
+            .then((res) => res && router.push('/app', 'none'));
 
     }, [])
+
+    useIonViewWillLeave(() => {
+        setFormData({ email: '', password: '' });
+    })
 
     const router = useIonRouter();
 
     const handleChange = (e: IonInputCustomEvent<InputInputEventDetail>) => {
         const name = e.target.name;
         const value = e.detail.value;
-        setFormData({...formData, [name]: value});
+        setFormData({ ...formData, [name]: value });
     }
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const token = await UserService.login(formData);
-       
+
         await present('Logging in...');
 
-        if(!token){
+        if (!token) {
             return await dismiss();
         }
 
@@ -104,7 +105,7 @@ export function Login() {
                                 <IonRow className="ion-justify-content-center">
                                     <IonCol size="12" sizeMd="8" sizeLg="6" sizeXl="4">
                                         <div className="ion-text-center ion-padding">
-                                            <img src={IonicLogo} alt="Ionic logo" height={'100dvh'} />
+                                            <IonImg src={IonicLogo} alt="Ionic logo" style={{height: '15dvh'}} />
                                         </div>
                                     </IonCol>
                                 </IonRow>
@@ -113,8 +114,10 @@ export function Login() {
                                         <IonCard>
                                             <IonCardContent>
                                                 <form onSubmit={handleSubmit}>
-                                                    <IonInput  label="E-mail" fill="outline" labelPlacement="floating" type="email" placeholder="johndoe@email.com" onIonInput={handleChange} value={formData.email} name='email'/>
-                                                    <IonInput className="ion-margin-top" label="Password" fill="outline" labelPlacement="floating" type="password" onIonInput={handleChange} value={formData.password} name='password'/>
+                                                    <IonInput label="E-mail" fill="outline" labelPlacement="floating" type="email" placeholder="johndoe@email.com" onIonInput={handleChange} value={formData.email} name='email' />
+                                                    <IonInput className="ion-margin-top" label="Password" fill="outline" labelPlacement="floating" type="password" onIonInput={handleChange} value={formData.password} name='password'>
+                                                        <IonInputPasswordToggle slot="end"></IonInputPasswordToggle>
+                                                    </IonInput>
                                                     <IonButton className="ion-margin-top" expand="block" type="submit">Login <IonIcon icon={logInOutline} slot="end" /></IonButton>
                                                     <IonButton className="ion-margin-top" routerLink="/register" color={'secondary'} expand="block" type="button">Create account <IonIcon icon={personCircleOutline} slot="end" /></IonButton>
                                                 </form>

@@ -1,4 +1,4 @@
-import { InputInputEventDetail, IonBackButton, IonButton, IonButtons, IonCard, IonCardContent, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonInput, IonPage, IonRow, IonTitle, IonToolbar } from "@ionic/react";
+import { InputInputEventDetail, IonBackButton, IonButton, IonButtons, IonCard, IonCardContent, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonImg, IonInput, IonPage, IonRow, IonTitle, IonToolbar } from "@ionic/react";
 import IonicLogo from '../../assets/images/ionic-logo.png'
 import { checkmarkDoneOutline, logInOutline, personCircleOutline } from "ionicons/icons";
 import React, { useState } from "react";
@@ -57,7 +57,7 @@ export function Register() {
                     <IonRow className="ion-justify-content-center">
                         <IonCol size="12" sizeMd="8" sizeLg="6" sizeXl="4">
                             <div className="ion-text-center ion-padding">
-                                <img src={IonicLogo} alt="Ionic logo" height={'100dvh'} />
+                                <IonImg src={IonicLogo} alt="Ionic logo" style={{height: '15dvh'}} />
                             </div>
                         </IonCol>
                     </IonRow>

@@ -1,8 +1,8 @@
-import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonChip, IonContent, IonFooter, IonHeader, IonIcon, IonItem, IonMenuButton, IonModal, IonPage, IonRefresher, IonRefresherContent, IonSkeletonText, IonText, IonTitle, IonToolbar, useIonAlert, useIonToast } from "@ionic/react";
+import { IonBadge, IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonChip, IonContent, IonFooter, IonHeader, IonIcon, IonItem, IonMenuButton, IonModal, IonPage, IonRefresher, IonRefresherContent, IonSkeletonText, IonText, IonTitle, IonToolbar, useIonAlert, useIonToast } from "@ionic/react";
 import { useEffect, useRef, useState } from "react";
 import courseService from "../../services/courseService";
 import { Course } from "../../lib/interfaces";
-import { RefresherCustomEvent } from "@ionic/core";
+import { RefresherCustomEvent, RefresherEventDetail } from "@ionic/core";
 import { createOutline, trashOutline } from "ionicons/icons";
 import { useUserStore } from "../../hooks/useUserStore";
 
@@ -28,7 +28,7 @@ export function Home() {
             .then(() => setTimeout(() => { setLoading(false) }, 2000));
     }, []);
 
-    const handleRefresh = async (e: RefresherCustomEvent) => {
+    const handleRefresh = async (e: CustomEvent<RefresherEventDetail>) => {
         const courses = await courseService.getCourses();
         setCourses(courses);
         e.detail.complete();
@@ -43,7 +43,7 @@ export function Home() {
     }
 
     const handleCloseModal = () => {
-        modal?.current?.dismiss();
+        // modal?.current?.dismiss();
         setSelectedCourse(null);
     }
 
@@ -124,7 +124,7 @@ export function Home() {
                                 courses.map(course => (
                                     <IonCard key={course.id} onClick={() => { handleCourseSelection(course.id) }}>
                                         <IonCardHeader>
-                                            <IonCardTitle>{course.title} <IonChip color={'primary'}>{course.category.name}</IonChip></IonCardTitle>
+                                            <IonCardTitle>{course.title} <IonBadge color={'primary'}>{course.category.name}</IonBadge></IonCardTitle>
                                         </IonCardHeader>
                                         <IonCardContent>
                                             <IonItem>
@@ -139,11 +139,11 @@ export function Home() {
                             )
                     )
                 }
-                <IonModal ref={modal} isOpen={selectedCourse !== null}>
+                <IonModal isOpen={selectedCourse !== null}>
                     <IonHeader>
                         <IonToolbar>
                             <IonButtons slot="end">
-                                <IonButton onClick={handleCloseModal}>Close</IonButton>
+                                <IonButton onClick={() => setSelectedCourse(null)}>Close</IonButton>
                             </IonButtons>
                         </IonToolbar>
                     </IonHeader>

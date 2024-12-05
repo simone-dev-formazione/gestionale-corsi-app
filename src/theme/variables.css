@@ -66,3 +66,11 @@ http://ionicframework.com/docs/theming/ */
 	--ion-color-dark-tint: #444444;
 
 }
+
+/* @media (prefers-color-scheme: dark){
+	:root{
+		--ion-color-primary: #2dd55b;
+	}
+} */
+
+
