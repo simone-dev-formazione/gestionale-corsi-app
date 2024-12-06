@@ -10,12 +10,12 @@ interface User {
 
 interface UserStore {
     user?: User;
-    setLoggedInUser: (token: string) => boolean; 
+    setLoggedInUser: (token: string) => void; 
     unsetLoggedInUser: () => void;
 }
 
 export const useUserStore = create<UserStore>()((set) => ({
     user: undefined,
-    setLoggedInUser: (token) => {set({user: AuthService.getLoggeduserData(token)}); return true},
+    setLoggedInUser: (token) => set({user: AuthService.getLoggeduserData(token)}),
     unsetLoggedInUser: () => set({user: undefined})
 }));

@@ -53,14 +53,14 @@ const Users: React.FC = () => {
                     <IonSearchbar onIonInput={(ev) => handleInput(ev)} />
                 </IonToolbar>
             </IonHeader>
-            <IonContent className="ion-padding" color={'light'}>
+            <IonContent className="ion-padding">
                 <IonRefresher slot='fixed' onIonRefresh={async (e) => await handleRefresh(e)}>
                     <IonRefresherContent />
                 </IonRefresher>
                 {loading && (
                     [...Array<number>(10)].map((_, index) => (
                         <IonCard key={index}>
-                            <IonCardContent className='ion-no-padding'>
+                            <IonCardContent>
                                 <IonItem lines='none'>
                                     <IonLabel>
                                         <IonSkeletonText animated={true} />

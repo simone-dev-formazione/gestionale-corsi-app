@@ -3,6 +3,7 @@ import React, {useState} from 'react';
 import cameraService from '../../services/cameraService';
 
 const Tab1: React.FC = () => {
+    
     const [image, setImage] = useState<string>('');
 
     const handleClick = async () => {

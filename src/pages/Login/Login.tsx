@@ -14,7 +14,8 @@ import { useIonViewWillEnter } from "@ionic/react";
 
 export function Login() {
 
-    const { user, setLoggedInUser } = useUserStore();
+    const setLoggedInUser = useUserStore((state) => state.setLoggedInUser);
+    const user = useUserStore((state) => state.user);
 
     const [formData, setFormData] = useState<{ email: string; password: string }>({ email: '', password: '' })
 
@@ -58,7 +59,12 @@ export function Login() {
         await present('Logging in...');
 
         if (!token) {
-            return await dismiss();
+            await dismiss();
+            return showToast({
+                message: 'Login failed',
+                color: "danger",
+                duration: 2000,
+            });
         }
 
         setLoggedInUser(token as string);
@@ -69,7 +75,7 @@ export function Login() {
                 value: token as string
             });
             await dismiss();
-            showToast({
+            await showToast({
                 message: 'Login successfull',
                 color: "success",
                 duration: 2000,

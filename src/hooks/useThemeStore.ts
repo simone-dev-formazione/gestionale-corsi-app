@@ -8,5 +8,5 @@ interface ThemeStore {
 
 export const useThemeStore = create<ThemeStore>()((set) => ({
     theme: false,
-    setGlobalTheme: (value) => {set({theme: value})}
+    setGlobalTheme: (value) => set({theme: value})
 }));

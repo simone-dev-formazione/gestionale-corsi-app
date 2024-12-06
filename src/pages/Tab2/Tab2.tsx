@@ -5,7 +5,8 @@ import { Preferences } from '@capacitor/preferences';
 
 const Tab2: React.FC = () => {
 
-    const {theme, setGlobalTheme} = useThemeStore();
+    const theme = useThemeStore((state) => state.theme);
+    const setGlobalTheme = useThemeStore((state) => state.setGlobalTheme);
 
     const [darkState, setDarkState] = useState<boolean>(false);
 
