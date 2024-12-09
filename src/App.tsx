@@ -1,9 +1,10 @@
-import { Route } from 'react-router-dom';
+import { Redirect, Route } from 'react-router-dom';
 import { IonApp, IonRouterOutlet, setupIonicReact, useIonViewWillEnter } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import { Login } from './pages/Login/Login';
 import { Register } from './pages/Register/Register';
 import { Menu } from './pages/Menu/Menu';
+import { useUserStore } from './hooks/useUserStore';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -41,14 +42,20 @@ import './theme/variables.css';
 setupIonicReact();
 
 const App: React.FC = () => {
+
+  const user = useUserStore((state) => state.user);
   
   return(
   <IonApp>
     <IonReactRouter>
       <IonRouterOutlet>
-        <Route exact path="/" component={Login}/>
+        <Route exact path="/" render={() =>
+          !user ? <Login /> : <Redirect to='/app'/>
+        } />
         <Route exact path="/register" component={Register}/>
-        <Route path='/app' component={Menu} />
+        <Route path='/app' render={(props) =>
+          !user ? <Redirect to='/' /> : <Menu {...props}/>
+        } />
       </IonRouterOutlet>
     </IonReactRouter>
   </IonApp>

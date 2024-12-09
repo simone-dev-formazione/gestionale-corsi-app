@@ -109,7 +109,9 @@ export function Menu({ match }: RouteComponentProps) {
                 <IonRouterOutlet id="main">
                     <Route exact path={`${match.url}/list`} component={Home} />
                     <Route path={`${match.url}/settings`} component={Settings} />
-                    <Route exact path={`${match.url}/admin/users`} component={Users} />
+                    <Route exact path={`${match.url}/admin/users`} render={() => 
+                        user?.role === 'admin' ? <Users /> : <Redirect to={`${match.url}`}/>
+                    } />
                     <Route exact path={`${match.url}/admin/test/:id`} component={Test} />
                     <Route exact path={`${match.url}`}>
                         <Redirect to={`${match.url}/list`} />

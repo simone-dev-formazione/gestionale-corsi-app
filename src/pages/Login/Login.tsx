@@ -30,7 +30,6 @@ export function Login() {
             key: 'introShown'
         })
             .then((res) => res.value !== 'true' && setIntroShown(false))
-        // Preferences.clear()
 
         Preferences.get({
             key: 'token'
@@ -67,8 +66,6 @@ export function Login() {
             });
         }
 
-        setLoggedInUser(token as string);
-
         setTimeout(async () => {
             await Preferences.set({
                 key: 'token',
@@ -81,6 +78,7 @@ export function Login() {
                 duration: 2000,
             });
             router.push('/app', 'forward');
+            setLoggedInUser(token as string);
         }, 2000);
 
     }
