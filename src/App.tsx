@@ -1,5 +1,5 @@
 import { Redirect, Route } from 'react-router-dom';
-import { IonApp, IonRouterOutlet, setupIonicReact, useIonViewWillEnter } from '@ionic/react';
+import { IonApp, IonRouterOutlet, setupIonicReact, useIonRouter, useIonViewWillEnter } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import { Login } from './pages/Login/Login';
 import { Register } from './pages/Register/Register';
@@ -38,20 +38,32 @@ import '@ionic/react/css/palettes/dark.class.css';
 
 /* Theme variables */
 import './theme/variables.css';
+import { useEffect } from 'react';
+import { Preferences } from '@capacitor/preferences';
 
 setupIonicReact();
 
 const App: React.FC = () => {
 
+  const router = useIonRouter();
+
   const user = useUserStore((state) => state.user);
+  const setLoggedInUser = useUserStore((state) => state.setLoggedInUser);
+
+  useEffect(() => {
+    Preferences.get({
+      key: 'token'
+  })
+      .then((res) => {res.value && setLoggedInUser(res.value)});
+  }, []);
   
   return(
   <IonApp>
     <IonReactRouter>
       <IonRouterOutlet>
-        <Route exact path="/" render={() =>
-          !user ? <Login /> : <Redirect to='/app'/>
-        } />
+        <Route exact path="/" render={() => 
+          !user ? <Login /> : <Redirect to={'/app'}/>
+        }/>
         <Route exact path="/register" component={Register}/>
         <Route path='/app' render={(props) =>
           !user ? <Redirect to='/' /> : <Menu {...props}/>

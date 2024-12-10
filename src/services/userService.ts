@@ -1,19 +1,17 @@
 import { CapacitorHttp, HttpResponse } from "@capacitor/core";
 import platformService from "./platformService";
 import { RegisterRequest } from "../lib/interfaces";
+import { LoginRequest } from "../lib/interfaces";
 
 class UserSevice {
     
-    async login(data: {email: string; password: string}): Promise<string | boolean>{
+    async login(data: LoginRequest): Promise<string | boolean>{
         try{
 
             const response: HttpResponse = await CapacitorHttp.post({
                 url: platformService.getBaseAddressForPlatform() + 'api/login',
                 headers: { 'Content-Type': 'application/json' },
-                data: {
-                    email: data.email,
-                    password: data.password
-                }
+                data: data
             });
     
             if(!response.data.token){

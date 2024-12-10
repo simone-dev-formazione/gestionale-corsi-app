@@ -1,4 +1,4 @@
-import { IonButton, IonCard, IonCardContent, IonCol, IonContent, IonFooter, IonGrid, IonHeader, IonIcon, IonImg, IonInput, IonInputPasswordToggle, IonPage, IonRow, IonTitle, IonToolbar, useIonViewWillLeave } from "@ionic/react";
+import { IonButton, IonCard, IonCardContent, IonCheckbox, IonCol, IonContent, IonFooter, IonGrid, IonHeader, IonIcon, IonImg, IonInput, IonInputPasswordToggle, IonPage, IonRow, IonTitle, IonToolbar, useIonViewWillLeave } from "@ionic/react";
 import { logInOutline, personCircleOutline } from 'ionicons/icons';
 import IonicLogo from '../../assets/images/ionic-logo.png'
 import { useIonRouter } from "@ionic/react";
@@ -6,18 +6,19 @@ import { useState, useEffect } from "react";
 import { Intro } from "../../components/Intro/Intro";
 import { Preferences } from "@capacitor/preferences";
 import { useIonLoading } from "@ionic/react";
-import { InputInputEventDetail, IonInputCustomEvent } from "@ionic/core";
+import { CheckboxChangeEventDetail, InputInputEventDetail, IonCheckboxCustomEvent, IonInputCustomEvent } from "@ionic/core";
 import UserService from "../../services/userService";
 import { useUserStore } from "../../hooks/useUserStore";
 import { useIonToast } from "@ionic/react";
 import { useIonViewWillEnter } from "@ionic/react";
+import { LoginRequest } from "../../lib/interfaces";
 
 export function Login() {
 
     const setLoggedInUser = useUserStore((state) => state.setLoggedInUser);
     const user = useUserStore((state) => state.user);
 
-    const [formData, setFormData] = useState<{ email: string; password: string }>({ email: '', password: '' })
+    const [formData, setFormData] = useState<LoginRequest>({ email: '', password: '' })
 
     const [introShown, setIntroShown] = useState<boolean>(true);
 
@@ -31,12 +32,10 @@ export function Login() {
         })
             .then((res) => res.value !== 'true' && setIntroShown(false))
 
-        Preferences.get({
-            key: 'token'
-        })
-            .then((res) => res.value && setLoggedInUser(res.value))
-            .then((res) => res && router.push('/app', 'none'));
-
+        // Preferences.get({
+        //     key: 'token'
+        // })
+        //     .then((res) => {res.value && setLoggedInUser(res.value); router.push('/app', 'none')});
     }, [])
 
     useIonViewWillLeave(() => {
@@ -45,7 +44,7 @@ export function Login() {
 
     const router = useIonRouter();
 
-    const handleChange = (e: IonInputCustomEvent<InputInputEventDetail>) => {
+    const handleChange = (e: IonInputCustomEvent<InputInputEventDetail> | IonCheckboxCustomEvent<CheckboxChangeEventDetail>) => {
         const name = e.target.name;
         const value = e.detail.value;
         setFormData({ ...formData, [name]: value });
@@ -67,10 +66,12 @@ export function Login() {
         }
 
         setTimeout(async () => {
+
             await Preferences.set({
                 key: 'token',
                 value: token as string
             });
+
             await dismiss();
             await showToast({
                 message: 'Login successfull',
@@ -109,7 +110,7 @@ export function Login() {
                                 <IonRow className="ion-justify-content-center">
                                     <IonCol size="12" sizeMd="8" sizeLg="6" sizeXl="4">
                                         <div className="ion-text-center ion-padding">
-                                            <IonImg src={IonicLogo} alt="Ionic logo" style={{height: '15dvh'}} />
+                                            <IonImg src={IonicLogo} alt="Ionic logo" style={{ height: '15dvh' }} />
                                         </div>
                                     </IonCol>
                                 </IonRow>

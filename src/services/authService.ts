@@ -23,6 +23,7 @@ class AuthService {
     }
     
     getLoggeduserData(token: string){
+        console.log('decoding...');
         const userData: GetUserRequest = jwtDecode(token);
         return userData;
     }
