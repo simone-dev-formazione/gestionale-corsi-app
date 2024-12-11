@@ -1,12 +1,12 @@
-import { IonButton, IonCard, IonCardContent, IonCheckbox, IonCol, IonContent, IonFooter, IonGrid, IonHeader, IonIcon, IonImg, IonInput, IonInputPasswordToggle, IonPage, IonRow, IonTitle, IonToolbar, useIonViewWillLeave } from "@ionic/react";
+import { IonButton, IonCard, IonCardContent, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonImg, IonInput, IonInputPasswordToggle, IonPage, IonRow, IonTitle, IonToolbar, useIonViewWillLeave } from "@ionic/react";
 import { logInOutline, personCircleOutline } from 'ionicons/icons';
 import IonicLogo from '../../assets/images/ionic-logo.png'
 import { useIonRouter } from "@ionic/react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Intro } from "../../components/Intro/Intro";
 import { Preferences } from "@capacitor/preferences";
 import { useIonLoading } from "@ionic/react";
-import { CheckboxChangeEventDetail, InputInputEventDetail, IonCheckboxCustomEvent, IonInputCustomEvent } from "@ionic/core";
+import { InputInputEventDetail, IonInputCustomEvent } from "@ionic/core";
 import UserService from "../../services/userService";
 import { useUserStore } from "../../hooks/useUserStore";
 import { useIonToast } from "@ionic/react";
@@ -31,11 +31,6 @@ export function Login() {
             key: 'introShown'
         })
             .then((res) => res.value !== 'true' && setIntroShown(false))
-
-        // Preferences.get({
-        //     key: 'token'
-        // })
-        //     .then((res) => {res.value && setLoggedInUser(res.value); router.push('/app', 'none')});
     }, [])
 
     useIonViewWillLeave(() => {
@@ -44,7 +39,7 @@ export function Login() {
 
     const router = useIonRouter();
 
-    const handleChange = (e: IonInputCustomEvent<InputInputEventDetail> | IonCheckboxCustomEvent<CheckboxChangeEventDetail>) => {
+    const handleChange = (e: IonInputCustomEvent<InputInputEventDetail>) => {
         const name = e.target.name;
         const value = e.detail.value;
         setFormData({ ...formData, [name]: value });

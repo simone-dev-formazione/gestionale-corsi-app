@@ -5,6 +5,8 @@ import { Login } from './pages/Login/Login';
 import { Register } from './pages/Register/Register';
 import { Menu } from './pages/Menu/Menu';
 import { useUserStore } from './hooks/useUserStore';
+import { useEffect } from 'react';
+import { Preferences } from '@capacitor/preferences';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -38,14 +40,10 @@ import '@ionic/react/css/palettes/dark.class.css';
 
 /* Theme variables */
 import './theme/variables.css';
-import { useEffect } from 'react';
-import { Preferences } from '@capacitor/preferences';
 
 setupIonicReact();
 
 const App: React.FC = () => {
-
-  const router = useIonRouter();
 
   const user = useUserStore((state) => state.user);
   const setLoggedInUser = useUserStore((state) => state.setLoggedInUser);

@@ -1,34 +1,38 @@
 import { jwtDecode } from "jwt-decode";
 import { Preferences } from "@capacitor/preferences";
-
-interface GetUserRequest {
-    firstName: string;
-    lastName: string;
-    role: string;
-    email: string;
-}
+import { JwtPayload } from "../lib/types";
 
 class AuthService {
 
-    async getToken(){
+    async getToken() {
         const response = await Preferences.get({
             key: 'token'
         })
 
-        if(!response || !response.value){
+        if (!response || !response.value) {
             return '';
         }
 
         return response.value
     }
-    
-    getLoggeduserData(token: string){
-        console.log('decoding...');
-        const userData: GetUserRequest = jwtDecode(token);
-        return userData;
+
+    async getLoggeduserData(token: string) {
+        const userData = jwtDecode<JwtPayload>(token);
+        const currentTime = Date.now() / 1000;
+        if (userData.exp! > currentTime) {
+            return {
+                firstName: userData.firstName,
+                lastName: userData.lastName,
+                email: userData.email,
+                role: userData.role,
+            };
+        } else {
+            await this.logOutUser();
+            return null;
+        }
     }
 
-    async logOutUser(){
+    async logOutUser() {
         await Preferences.remove({
             key: 'token'
         })
