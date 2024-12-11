@@ -47,11 +47,11 @@ export function Login() {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const token = await UserService.login(formData);
+        const response = await UserService.login(formData);
 
         await present('Logging in...');
 
-        if (!token) {
+        if (!response) {
             await dismiss();
             return showToast({
                 message: 'Login failed',
@@ -61,12 +61,6 @@ export function Login() {
         }
 
         setTimeout(async () => {
-
-            await Preferences.set({
-                key: 'token',
-                value: token as string
-            });
-
             await dismiss();
             await showToast({
                 message: 'Login successfull',
@@ -74,7 +68,7 @@ export function Login() {
                 duration: 2000,
             });
             router.push('/app', 'forward');
-            setLoggedInUser(token as string);
+            setLoggedInUser(response as string);
         }, 2000);
 
     }

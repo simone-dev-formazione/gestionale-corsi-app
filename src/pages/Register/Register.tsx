@@ -1,6 +1,6 @@
 import { InputInputEventDetail, IonBackButton, IonButton, IonButtons, IonCard, IonCardContent, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonImg, IonInput, IonPage, IonRow, IonTitle, IonToolbar } from "@ionic/react";
 import IonicLogo from '../../assets/images/ionic-logo.png'
-import { checkmarkDoneOutline, logInOutline, personCircleOutline } from "ionicons/icons";
+import { checkmarkDoneOutline } from "ionicons/icons";
 import React, { useState } from "react";
 import { useIonRouter } from "@ionic/react";
 import { IonInputCustomEvent } from "@ionic/core";
@@ -27,7 +27,7 @@ export function Register() {
         const response = await userService.register(formData);
         if(!response){
             return showToast({
-                message: 'Error, please try again',
+                message: 'Registration failed',
                 color: 'danger',
                 duration: 2000
             });

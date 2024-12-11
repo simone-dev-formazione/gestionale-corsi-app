@@ -2,6 +2,7 @@ import { CapacitorHttp, HttpResponse } from "@capacitor/core";
 import platformService from "./platformService";
 import { RegisterRequest } from "../lib/interfaces";
 import { LoginRequest } from "../lib/interfaces";
+import { Preferences } from "@capacitor/preferences";
 
 class UserSevice {
     
@@ -17,6 +18,11 @@ class UserSevice {
             if(!response.data.token){
                 return false;
             }
+
+            await Preferences.set({
+                key: 'token',
+                value: response.data.token
+            });
 
             return response.data.token;
         }
