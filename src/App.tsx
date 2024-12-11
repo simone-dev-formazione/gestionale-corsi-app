@@ -7,6 +7,7 @@ import { Menu } from './pages/Menu/Menu';
 import { useUserStore } from './hooks/useUserStore';
 import { useEffect } from 'react';
 import { Preferences } from '@capacitor/preferences';
+import { useThemeStore } from './hooks/useThemeStore';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -41,34 +42,45 @@ import '@ionic/react/css/palettes/dark.class.css';
 /* Theme variables */
 import './theme/variables.css';
 
+
 setupIonicReact();
 
 const App: React.FC = () => {
 
   const user = useUserStore((state) => state.user);
   const setLoggedInUser = useUserStore((state) => state.setLoggedInUser);
+  const setGlobalTheme = useThemeStore((state) => state.setGlobalTheme);
 
   useEffect(() => {
     Preferences.get({
       key: 'token'
-  })
-      .then((res) => {res.value && setLoggedInUser(res.value)});
+    })
+      .then((res) => { res.value && setLoggedInUser(res.value) });
+
+    Preferences.get({
+      key: 'dark'
+    })
+      .then((t) => {
+        t.value === 'true' && document.documentElement.classList.add('ion-palette-dark');
+        setGlobalTheme(t.value === 'true');
+      })
   }, []);
-  
-  return(
-  <IonApp>
-    <IonReactRouter>
-      <IonRouterOutlet>
-        <Route exact path="/" render={() => 
-          !user ? <Login /> : <Redirect to={'/app'}/>
-        }/>
-        <Route exact path="/register" component={Register}/>
-        <Route path='/app' render={(props) =>
-          !user ? <Redirect to='/' /> : <Menu {...props}/>
-        } />
-      </IonRouterOutlet>
-    </IonReactRouter>
-  </IonApp>
-)};
+
+  return (
+    <IonApp>
+      <IonReactRouter>
+        <IonRouterOutlet>
+          <Route exact path="/" render={() =>
+            !user ? <Login /> : <Redirect to={'/app'} />
+          } />
+          <Route exact path="/register" component={Register} />
+          <Route path='/app' render={(props) =>
+            !user ? <Redirect to='/' /> : <Menu {...props} />
+          } />
+        </IonRouterOutlet>
+      </IonReactRouter>
+    </IonApp>
+  )
+};
 
 export default App;

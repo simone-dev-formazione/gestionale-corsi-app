@@ -22,18 +22,6 @@ export function Menu({ match }: RouteComponentProps) {
 
     const [showAlert] = useIonAlert();
 
-    const setGlobalTheme = useThemeStore((state) => state.setGlobalTheme);
-
-    useIonViewWillEnter(() => {
-        Preferences.get({
-            key: 'dark'
-        })
-            .then((t) => {
-                t.value === 'true' && document.documentElement.classList.add('ion-palette-dark');
-                setGlobalTheme(t.value === 'true');
-            })
-    });
-
     const handleLogout = async () => {
         showAlert({
             header: 'Confirm Logout',
