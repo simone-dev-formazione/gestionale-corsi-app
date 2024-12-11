@@ -1,4 +1,4 @@
-import { IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonItem, IonMenu, IonMenuToggle, IonPage, IonRouterOutlet, IonSplitPane, IonTitle, IonToolbar, useIonViewWillEnter } from "@ionic/react";
+import { IonButton, IonContent, IonHeader, IonIcon, IonItem, IonMenu, IonMenuToggle, IonPage, IonRouterOutlet, IonSplitPane, IonTitle, IonToolbar } from "@ionic/react";
 import { useIonRouter } from "@ionic/react";
 import { homeOutline, hammerOutline, logOutOutline, peopleOutline } from "ionicons/icons";
 import { Redirect, Route, RouteComponentProps } from "react-router";
@@ -9,8 +9,6 @@ import AuthService from "../../services/authService";
 import Users from "../Users/Users";
 import { useIonAlert } from "@ionic/react";
 import './Menu.css';
-import { Preferences } from "@capacitor/preferences";
-import { useThemeStore } from "../../hooks/useThemeStore";
 import Test from "../Test/Test";
 
 export function Menu({ match }: RouteComponentProps) {
