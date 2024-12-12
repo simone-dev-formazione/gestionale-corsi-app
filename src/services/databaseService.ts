@@ -43,9 +43,9 @@ class DatabaseService {
             `;
 
             await this.db.execute(query);
-            await this.addLog("Service started", "Service started successfully");
+            await this.addLog("Application started", "Application started successfully");
         } catch (error) {
-            console.error("Errore durante la creazione del database:", error);
+            console.error("Errore durante la creazione del database:", (error as any).message);
             throw error;
         }
 
@@ -55,15 +55,14 @@ class DatabaseService {
     async addLog(event: string, details: string): Promise<void> {
         try {
             if (!this.db) throw new Error("Database non inizializzato");
-            const timestamp = new Date().toISOString();
+            const timestamp = new Date().toLocaleString();
             const query = `
                 INSERT INTO logs (event, timestamp, details)
                 VALUES (?, ?, ?);
             `;
             await this.db.run(query, [event, timestamp, details]);
         } catch (error) {
-            console.error("Errore durante l'aggiunta del log:", error);
-            throw error;
+            console.error("Errore durante l'aggiunta del log:", (error as any).message);
         }
     }
 
@@ -74,8 +73,8 @@ class DatabaseService {
             const result = await this.db.query(query);
             return result.values || [];
         } catch (error) {
-            console.error("Errore durante il caricamento dei log:", error);
-            throw error;
+            console.error("Errore durante il caricamento dei log:", (error as any).message);
+            return [];
         }
     }
 
@@ -85,8 +84,17 @@ class DatabaseService {
             const query = "DELETE FROM logs";
             await this.db.run(query);
         } catch (error) {
-            console.error("Errore durante la cancellazione dei log:", error);
-            throw error;
+            console.error("Errore durante la cancellazione dei log:", (error as any).message);
+        }
+    }
+
+    async deleteById(id: string | number): Promise<void> {
+        try {
+            if (!this.db) throw new Error("Database non inizializzato");
+            const query = "DELETE FROM logs WHERE id = ?";
+            await this.db.run(query, [id]);
+        } catch (error) {
+            console.error("Errore durante la cancellazione del log:", (error as any).message);
         }
     }
 }

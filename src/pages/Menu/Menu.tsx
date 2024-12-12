@@ -9,7 +9,7 @@ import AuthService from "../../services/authService";
 import Users from "../Users/Users";
 import { useIonAlert } from "@ionic/react";
 import './Menu.css';
-import Test from "../Test/Test";
+import Logs from "../Logs/Logs";
 
 export function Menu({ match }: RouteComponentProps) {
 
@@ -75,9 +75,9 @@ export function Menu({ match }: RouteComponentProps) {
                                         </IonItem>
                                     </IonMenuToggle>
                                     <IonMenuToggle autoHide={false}>
-                                        <IonItem detail={true} routerLink={'/app/admin/test/17'} routerDirection="none">
+                                        <IonItem detail={true} routerLink={'/app/admin/logs'} routerDirection="none">
                                             <IonIcon icon={peopleOutline} className="ion-margin-end" />
-                                            [Admin] test
+                                            [Admin] Logs
                                         </IonItem>
                                     </IonMenuToggle>
                                 </>
@@ -98,7 +98,7 @@ export function Menu({ match }: RouteComponentProps) {
                     <Route exact path={`${match.url}/admin/users`} render={() => 
                         user?.role === 'admin' ? <Users /> : <Redirect to={`${match.url}`}/>
                     } />
-                    <Route exact path={`${match.url}/admin/test/:id`} component={Test} />
+                    <Route exact path={`${match.url}/admin/logs`} component={Logs} />
                     <Route exact path={`${match.url}`}>
                         <Redirect to={`${match.url}/list`} />
                     </Route>

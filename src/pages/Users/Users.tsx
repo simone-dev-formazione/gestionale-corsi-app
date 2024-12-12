@@ -13,13 +13,9 @@ const Users: React.FC = () => {
 
     const [results, setResults] = useState<User[]>([]);
 
-    const [logs, setLogs] = useState<LogEntry[]>([]);
-
     useIonViewWillEnter(() => {
 
         databaseService.getInstance().addLog("Users page loaded", "Users page loaded successfully");
-
-        databaseService.getInstance().loadLogs().then((logs) => setLogs(logs));
 
         AdminService.getUsers()
             .then((res) => { setUsers(res); setResults(res); })
@@ -66,22 +62,6 @@ const Users: React.FC = () => {
                 <IonRefresher slot='fixed' onIonRefresh={async (e) => await handleRefresh(e)}>
                     <IonRefresherContent />
                 </IonRefresher>
-
-                {logs.map((log) => (
-                    <IonCard key={log.id}>
-                        <IonCardContent>
-                            <IonItem lines='none'>
-                                <IonLabel>
-                                    {log.event}
-                                    <p>{log.timestamp}</p>
-                                </IonLabel>
-                                <IonChip slot='end' color={'primary'}>{log.event.substring(0, 1).toUpperCase()}</IonChip>
-                            </IonItem>
-                        </IonCardContent>
-                    </IonCard>
-                ))}
-
-
 
                 {loading && (
                     [...Array<number>(10)].map((_, index) => (
