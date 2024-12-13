@@ -5,7 +5,7 @@ import { useDarkMode } from '../../hooks/useDarkMode';
 
 const Tab2: React.FC = () => {
 
-    const { checkDarkMode, toggleDarkMode } = useDarkMode();
+    const {checkDarkMode, toggleDarkMode} = useDarkMode();
 
     const [darkState, setDarkState] = useState<boolean>(false);
 
@@ -14,11 +14,18 @@ const Tab2: React.FC = () => {
     });
 
     const handleToggle = async () => {
-        if (!darkState) {
-            setDarkState(await toggleDarkMode(true));
-        }
-        else {
-            setDarkState(await toggleDarkMode(false));
+        if(!darkState){
+            setDarkState(toggleDarkMode(true));
+            await Preferences.set({
+                key: 'dark',
+                value: 'true'
+            }) }
+        else{
+            setDarkState(toggleDarkMode(false));
+            await Preferences.set({
+                key: 'dark',
+                value: 'false'
+            });
         }
     }
 
