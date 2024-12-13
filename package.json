@@ -1,5 +1,5 @@
 {
-  "name": "Corsi",
+  "name": "corsi",
   "private": true,
   "version": "0.0.5",
   "type": "module",
@@ -9,7 +9,8 @@
     "preview": "vite preview",
     "test.e2e": "cypress run",
     "test.unit": "vitest",
-    "lint": "eslint"
+    "lint": "eslint",
+    "android": "ionic capacitor run android --livereload --external" 
   },
   "dependencies": {
     "@capacitor-community/sqlite": "^6.0.2",
