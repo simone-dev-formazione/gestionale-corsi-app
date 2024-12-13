@@ -7,8 +7,8 @@ import { Menu } from './pages/Menu/Menu';
 import { useUserStore } from './hooks/useUserStore';
 import { useEffect } from 'react';
 import { Preferences } from '@capacitor/preferences';
-import { useThemeStore } from './hooks/useThemeStore';
 import databaseService from './services/databaseService';
+import { useDarkMode } from './hooks/useDarkMode';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -48,9 +48,10 @@ setupIonicReact();
 
 const App: React.FC = () => {
 
+  const {toggleDarkMode} = useDarkMode();
+
   const user = useUserStore((state) => state.user);
   const setLoggedInUser = useUserStore((state) => state.setLoggedInUser);
-  const setGlobalTheme = useThemeStore((state) => state.setGlobalTheme);
 
   useEffect(() => {
 
@@ -67,8 +68,7 @@ const App: React.FC = () => {
       key: 'dark'
     })
       .then((t) => {
-        t.value === 'true' && document.documentElement.classList.add('ion-palette-dark');
-        setGlobalTheme(t.value === 'true');
+        t.value === 'true' && toggleDarkMode(true);
       })
   }, []);
 

@@ -1,32 +1,27 @@
 import { IonButtons, IonContent, IonHeader, IonItem, IonMenuButton, IonPage, IonTitle, IonToggle, IonToolbar, ToggleCustomEvent, useIonViewWillEnter } from '@ionic/react';
 import React, { useState } from 'react';
-import { useThemeStore } from '../../hooks/useThemeStore';
 import { Preferences } from '@capacitor/preferences';
+import { useDarkMode } from '../../hooks/useDarkMode';
 
 const Tab2: React.FC = () => {
 
-    const theme = useThemeStore((state) => state.theme);
-    const setGlobalTheme = useThemeStore((state) => state.setGlobalTheme);
+    const {checkDarkMode, toggleDarkMode} = useDarkMode();
 
     const [darkState, setDarkState] = useState<boolean>(false);
 
     useIonViewWillEnter(() => {
-        setDarkState(theme);
+        setDarkState(checkDarkMode());
     });
 
     const handleToggle = async () => {
         if(!darkState){
-            document.documentElement.classList.add('ion-palette-dark');
-            setGlobalTheme(true);
-            setDarkState(true);
+            setDarkState(toggleDarkMode(true));
             await Preferences.set({
                 key: 'dark',
                 value: 'true'
             }) }
         else{
-            document.documentElement.classList.remove('ion-palette-dark');
-            setGlobalTheme(false);
-            setDarkState(false);
+            setDarkState(toggleDarkMode(false));
             await Preferences.set({
                 key: 'dark',
                 value: 'false'
