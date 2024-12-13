@@ -1,9 +1,18 @@
-const toggleDarkMode = (enable: boolean) => {
+import { Preferences } from "@capacitor/preferences";
+
+const toggleDarkMode = async (enable: boolean) => {
   enable
     ? document.documentElement.classList.add("ion-palette-dark")
     : document.documentElement.classList.remove("ion-palette-dark");
 
-    return checkDarkMode();
+    const isDark = checkDarkMode();
+
+    await Preferences.set({
+      key: 'dark',
+      value: String(isDark)
+    });
+
+    return isDark;
 };
 
 const checkDarkMode = () => {
