@@ -8,6 +8,8 @@ import { useUserStore } from './hooks/useUserStore';
 import { useEffect } from 'react';
 import { Preferences } from '@capacitor/preferences';
 import { useDarkMode } from './hooks/useDarkMode';
+// import DatabaseService from './services/databaseService';
+import { DatabaseProvider } from './contexts/DatabaseContext';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -42,18 +44,19 @@ import '@ionic/react/css/palettes/dark.class.css';
 /* Theme variables */
 import './theme/variables.css';
 
-
 setupIonicReact();
 
 const App: React.FC = () => {
 
-  const {toggleDarkMode} = useDarkMode();
+  const { toggleDarkMode } = useDarkMode();
 
   const user = useUserStore((state) => state.user);
   const setLoggedInUser = useUserStore((state) => state.setLoggedInUser);
 
   useEffect(() => {
-    
+
+    // DatabaseService.getInstance().initializeDatabase();
+
     Preferences.get({
       key: 'token'
     })
@@ -69,17 +72,19 @@ const App: React.FC = () => {
 
   return (
     <IonApp>
-      <IonReactRouter>
-        <IonRouterOutlet>
-          <Route exact path="/" render={() =>
-            !user ? <Login /> : <Redirect to={'/app'} />
-          } />
-          <Route exact path="/register" component={Register} />
-          <Route path='/app' render={(props) =>
-            !user ? <Redirect to='/' /> : <Menu {...props} />
-          } />
-        </IonRouterOutlet>
-      </IonReactRouter>
+      <DatabaseProvider>
+        <IonReactRouter>
+          <IonRouterOutlet>
+            <Route exact path="/" render={() =>
+              !user ? <Login /> : <Redirect to={'/app'} />
+            } />
+            <Route exact path="/register" component={Register} />
+            <Route path='/app' render={(props) =>
+              !user ? <Redirect to='/' /> : <Menu {...props} />
+            } />
+          </IonRouterOutlet>
+        </IonReactRouter>
+      </DatabaseProvider>
     </IonApp>
   )
 };

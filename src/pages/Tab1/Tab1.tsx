@@ -1,8 +1,15 @@
-import { IonButton, IonButtons, IonContent, IonHeader, IonImg, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { IonButton, IonButtons, IonContent, IonHeader, IonImg, IonMenuButton, IonPage, IonTitle, IonToolbar, useIonViewDidEnter } from '@ionic/react';
 import React, {useState} from 'react';
 import cameraService from '../../services/cameraService';
+import { useDatabase } from '../../contexts/DatabaseContext';
 
 const Tab1: React.FC = () => {
+
+    const { addLog } = useDatabase();
+
+    useIonViewDidEnter(() => {
+        addLog?.("Take Photo page entered", "Take Photo page entered successfully");
+    });
     
     const [image, setImage] = useState<string>('');
 

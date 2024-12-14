@@ -1,11 +1,14 @@
-import { IonButtons, IonContent, IonHeader, IonItem, IonMenuButton, IonPage, IonTitle, IonToggle, IonToolbar, ToggleCustomEvent, useIonViewWillEnter } from '@ionic/react';
+import { IonButtons, IonContent, IonHeader, IonItem, IonMenuButton, IonPage, IonTitle, IonToggle, IonToolbar, ToggleCustomEvent, useIonViewDidEnter, useIonViewWillEnter } from '@ionic/react';
 import React, { useState } from 'react';
 import { Preferences } from '@capacitor/preferences';
 import { useDarkMode } from '../../hooks/useDarkMode';
+import { useDatabase } from '../../contexts/DatabaseContext';
 
 const Tab2: React.FC = () => {
 
-    const {checkDarkMode, toggleDarkMode} = useDarkMode();
+    const { addLog } = useDatabase();
+
+    const { checkDarkMode, toggleDarkMode } = useDarkMode();
 
     const [darkState, setDarkState] = useState<boolean>(false);
 
@@ -13,14 +16,19 @@ const Tab2: React.FC = () => {
         setDarkState(checkDarkMode());
     });
 
+    useIonViewDidEnter(() => {
+        addLog?.("Settings page entered", "Take Photo page entered successfully");
+    });
+
     const handleToggle = async () => {
-        if(!darkState){
+        if (!darkState) {
             setDarkState(toggleDarkMode(true));
             await Preferences.set({
                 key: 'dark',
                 value: 'true'
-            }) }
-        else{
+            })
+        }
+        else {
             setDarkState(toggleDarkMode(false));
             await Preferences.set({
                 key: 'dark',

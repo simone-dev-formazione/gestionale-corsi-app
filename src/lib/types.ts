@@ -27,8 +27,9 @@ export type LogEntry = {
 
 export type DatabaseContextType = {
     db: SQLiteDBConnection | null;
-    addLog: (database: SQLiteDBConnection, event: string, details: string) => Promise<void>;
-    loadLogs: (database: SQLiteDBConnection) => Promise<LogEntry[]>;
-    clearLogs: (database: SQLiteDBConnection) => Promise<void>;
-    deleteById: (database: SQLiteDBConnection, id: string | number) => Promise<void>;
+    initializeDatabase: () => Promise<void>;
+    addLog: (event: string, details: string) => Promise<void>;
+    loadLogs: () => Promise<LogEntry[]>;
+    clearLogs: () => Promise<void>;
+    deleteById: (id: string | number) => Promise<void>;
 }

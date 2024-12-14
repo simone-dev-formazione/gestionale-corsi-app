@@ -1,11 +1,12 @@
-import { IonBadge, IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonChip, IonContent, IonFooter, IonHeader, IonIcon, IonItem, IonMenuButton, IonModal, IonPage, IonRefresher, IonRefresherContent, IonSkeletonText, IonText, IonTitle, IonToolbar, useIonAlert, useIonToast, useIonViewWillEnter } from "@ionic/react";
+import { IonBadge, IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonChip, IonContent, IonFooter, IonHeader, IonIcon, IonItem, IonMenuButton, IonModal, IonPage, IonRefresher, IonRefresherContent, IonSkeletonText, IonText, IonTitle, IonToolbar, useIonAlert, useIonToast, useIonViewDidEnter, useIonViewWillEnter } from "@ionic/react";
 import { useEffect, useRef, useState } from "react";
 import courseService from "../../services/courseService";
 import { Course } from "../../lib/interfaces";
 import { RefresherEventDetail } from "@ionic/core";
 import { createOutline, trashOutline } from "ionicons/icons";
 import { useUserStore } from "../../hooks/useUserStore";
-import { useDatabaseContext } from "../../hooks/useDatabaseContext";
+// import DatabaseService from "../../services/databaseService";
+import { useDatabase } from "../../contexts/DatabaseContext";
 
 export function Home() {
 
@@ -23,12 +24,13 @@ export function Home() {
 
     const [showToast] = useIonToast();
 
-    const { db, addLog } = useDatabaseContext()!;
+    const { addLog } = useDatabase();
 
     useIonViewWillEnter(() => {
         courseService.getCourses()
-            .then(res => {setCourses(res); return addLog(db!, "Courses page loaded", "courses page loaded successfully")})
+            .then(res => setCourses(res))
             .then(() => setTimeout(() => { setLoading(false) }, 2000));
+
     }, []);
 
     const handleRefresh = async (e: CustomEvent<RefresherEventDetail>) => {

@@ -2,25 +2,26 @@ import { IonButton, IonButtons, IonCard, IonCardContent, IonChip, IonContent, Io
 import React, { useState } from 'react';
 import { useIonViewWillEnter } from '@ionic/react';
 import { trashOutline } from 'ionicons/icons';
-import { useDatabaseContext } from '../../hooks/useDatabaseContext';
 import { LogEntry } from '../../lib/types';
+// import DatabaseService from '../../services/databaseService';
+import { useDatabase } from '../../contexts/DatabaseContext';
 
 const Logs: React.FC = () => {
     const [logs, setLogs] = useState<LogEntry[]>([]);
 
-    const { db, loadLogs, clearLogs, deleteById } = useDatabaseContext()!;
+    const { loadLogs, deleteById, clearLogs } = useDatabase();
 
     useIonViewWillEnter(() => {
-        loadLogs(db!).then((logs) => setLogs(logs));
+        loadLogs?.().then((logs) => setLogs(logs));
     });
 
     const handleDeleteAllClick = async () => {
-        await clearLogs(db!);
+        await clearLogs?.();
         setLogs([]);
-    };  
+    };
 
     const handleDeleteOneClick = async (id: string | number) => {
-        await deleteById(db!, id);
+        await deleteById?.(id);
         setLogs(logs.filter((log) => log.id !== id));
     }
 
@@ -43,25 +44,25 @@ const Logs: React.FC = () => {
                             </IonItem>
                         </IonCardContent>
                     </IonCard>
-                ) 
-                : (
-                    <>
-                        <IonButton onClick={handleDeleteAllClick}>Delete all</IonButton>
-                        {logs.map((log) => (
-                            <IonCard key={log.id}>
-                                <IonCardContent>
-                                    <IonItem lines='none'>
-                                        <IonLabel>
-                                            {log.event}
-                                            <p>{log.timestamp}</p>
-                                        </IonLabel>
-                                        <IonIcon icon={trashOutline} onClick={() => handleDeleteOneClick(log.id)}/>
-                                    </IonItem>
-                                </IonCardContent>
-                            </IonCard>
-                        ))}
-                    </>
-                )}
+                )
+                    : (
+                        <>
+                            <IonButton onClick={handleDeleteAllClick}>Delete all</IonButton>
+                            {logs.map((log) => (
+                                <IonCard key={log.id}>
+                                    <IonCardContent>
+                                        <IonItem lines='none'>
+                                            <IonLabel>
+                                                {log.event}
+                                                <p>{log.timestamp}</p>
+                                            </IonLabel>
+                                            <IonIcon icon={trashOutline} onClick={() => handleDeleteOneClick(log.id)} />
+                                        </IonItem>
+                                    </IonCardContent>
+                                </IonCard>
+                            ))}
+                        </>
+                    )}
             </IonContent>
         </IonPage>
     );

@@ -1,9 +1,10 @@
-import { IonButtons, IonCard, IonCardContent, IonChip, IonContent, IonHeader, IonItem, IonLabel, IonList, IonMenuButton, IonPage, IonRefresher, IonRefresherContent, IonSearchbar, IonSkeletonText, IonTitle, IonToolbar, RefresherCustomEvent } from '@ionic/react';
+import { IonButtons, IonCard, IonCardContent, IonChip, IonContent, IonHeader, IonItem, IonLabel, IonList, IonMenuButton, IonPage, IonRefresher, IonRefresherContent, IonSearchbar, IonSkeletonText, IonTitle, IonToolbar, RefresherCustomEvent, useIonViewDidEnter } from '@ionic/react';
 import React, { useState } from 'react';
 import AdminService from '../../services/adminService';
 import { User } from '../../lib/interfaces';
 import { useIonViewWillEnter } from '@ionic/react';
-import { useDatabaseContext } from '../../hooks/useDatabaseContext';
+// import DatabaseService from '../../services/databaseService';
+import { useDatabase } from '../../contexts/DatabaseContext';
 
 const Users: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(true);
@@ -12,17 +13,18 @@ const Users: React.FC = () => {
 
     const [results, setResults] = useState<User[]>([]);
 
-    const { db, addLog } = useDatabaseContext()!;
+    const { addLog } = useDatabase();
 
     useIonViewWillEnter(() => {
-
-        addLog(db!, "Users page loaded", "Users page loaded successfully");
-
         AdminService.getUsers()
             .then((res) => { setUsers(res); setResults(res); })
             .then(() => setTimeout(() => { setLoading(false) }, 2000));
 
     }, []);
+
+    useIonViewDidEnter(() => {
+        addLog?.("Users page entered", "Users page entered successfully");
+    })
 
     const handleInput = (ev: Event) => {
         const target = ev.target as HTMLIonSearchbarElement;
