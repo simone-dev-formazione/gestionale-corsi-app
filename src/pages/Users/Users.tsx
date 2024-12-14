@@ -3,8 +3,7 @@ import React, { useState } from 'react';
 import AdminService from '../../services/adminService';
 import { User } from '../../lib/interfaces';
 import { useIonViewWillEnter } from '@ionic/react';
-import { LogEntry } from '../../services/databaseService';
-import databaseService from '../../services/databaseService';
+import { useDatabaseContext } from '../../hooks/useDatabaseContext';
 
 const Users: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(true);
@@ -13,9 +12,11 @@ const Users: React.FC = () => {
 
     const [results, setResults] = useState<User[]>([]);
 
+    const { db, addLog } = useDatabaseContext()!;
+
     useIonViewWillEnter(() => {
 
-        databaseService.getInstance().addLog("Users page loaded", "Users page loaded successfully");
+        addLog(db!, "Users page loaded", "Users page loaded successfully");
 
         AdminService.getUsers()
             .then((res) => { setUsers(res); setResults(res); })

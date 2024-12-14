@@ -1,4 +1,4 @@
-import { IonButton, IonContent, IonHeader, IonIcon, IonItem, IonMenu, IonMenuToggle, IonPage, IonRouterOutlet, IonSplitPane, IonTitle, IonToolbar } from "@ionic/react";
+import { IonButton, IonContent, IonHeader, IonIcon, IonItem, IonMenu, IonMenuToggle, IonPage, IonRouterOutlet, IonSplitPane, IonTitle, IonToolbar, isPlatform } from "@ionic/react";
 import { useIonRouter } from "@ionic/react";
 import { homeOutline, hammerOutline, logOutOutline, peopleOutline } from "ionicons/icons";
 import { Redirect, Route, RouteComponentProps } from "react-router";
@@ -74,12 +74,14 @@ export function Menu({ match }: RouteComponentProps) {
                                             [Admin] Users
                                         </IonItem>
                                     </IonMenuToggle>
-                                    <IonMenuToggle autoHide={false}>
-                                        <IonItem detail={true} routerLink={'/app/admin/logs'} routerDirection="none">
-                                            <IonIcon icon={peopleOutline} className="ion-margin-end" />
-                                            [Admin] Logs
-                                        </IonItem>
-                                    </IonMenuToggle>
+                                    {isPlatform('mobile') && (
+                                        <IonMenuToggle autoHide={false}>
+                                            <IonItem detail={true} routerLink={'/app/admin/logs'} routerDirection="none">
+                                                <IonIcon icon={peopleOutline} className="ion-margin-end" />
+                                                [Admin] Logs
+                                            </IonItem>
+                                        </IonMenuToggle>
+                                    )}
                                 </>
                             )
                         }
@@ -95,8 +97,8 @@ export function Menu({ match }: RouteComponentProps) {
                 <IonRouterOutlet id="main">
                     <Route exact path={`${match.url}/list`} component={Home} />
                     <Route path={`${match.url}/settings`} component={Settings} />
-                    <Route exact path={`${match.url}/admin/users`} render={() => 
-                        user?.role === 'admin' ? <Users /> : <Redirect to={`${match.url}`}/>
+                    <Route exact path={`${match.url}/admin/users`} render={() =>
+                        user?.role === 'admin' ? <Users /> : <Redirect to={`${match.url}`} />
                     } />
                     <Route exact path={`${match.url}/admin/logs`} component={Logs} />
                     <Route exact path={`${match.url}`}>

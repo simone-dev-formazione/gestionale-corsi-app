@@ -10,7 +10,8 @@
     "test.e2e": "cypress run",
     "test.unit": "vitest",
     "lint": "eslint",
-    "android": "ionic capacitor copy && ionic capacitor run android --livereload --external" 
+    "android": "ionic capacitor copy && ionic capacitor run android --livereload --external",
+    "ios": "ionic capacitor copy && ionic capacitor run ios --livereload --external" 
   },
   "dependencies": {
     "@capacitor-community/sqlite": "^6.0.2",

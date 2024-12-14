@@ -7,7 +7,6 @@ import { Menu } from './pages/Menu/Menu';
 import { useUserStore } from './hooks/useUserStore';
 import { useEffect } from 'react';
 import { Preferences } from '@capacitor/preferences';
-import databaseService from './services/databaseService';
 import { useDarkMode } from './hooks/useDarkMode';
 
 /* Core CSS required for Ionic components to work properly */
@@ -54,11 +53,7 @@ const App: React.FC = () => {
   const setLoggedInUser = useUserStore((state) => state.setLoggedInUser);
 
   useEffect(() => {
-
-    if(isPlatform('mobile')) {
-      databaseService.getInstance().initializeDatabase();
-    }
-
+    
     Preferences.get({
       key: 'token'
     })

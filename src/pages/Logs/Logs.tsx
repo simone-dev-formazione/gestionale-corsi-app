@@ -1,23 +1,26 @@
 import { IonButton, IonButtons, IonCard, IonCardContent, IonChip, IonContent, IonHeader, IonIcon, IonItem, IonLabel, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import React, { useState } from 'react';
 import { useIonViewWillEnter } from '@ionic/react';
-import databaseService, { LogEntry } from '../../services/databaseService';
 import { trashOutline } from 'ionicons/icons';
+import { useDatabaseContext } from '../../hooks/useDatabaseContext';
+import { LogEntry } from '../../lib/types';
 
 const Logs: React.FC = () => {
     const [logs, setLogs] = useState<LogEntry[]>([]);
 
+    const { db, loadLogs, clearLogs, deleteById } = useDatabaseContext()!;
+
     useIonViewWillEnter(() => {
-        databaseService.getInstance().loadLogs().then((logs) => setLogs(logs));
+        loadLogs(db!).then((logs) => setLogs(logs));
     });
 
     const handleDeleteAllClick = async () => {
-        await databaseService.getInstance().clearLogs();
+        await clearLogs(db!);
         setLogs([]);
     };  
 
     const handleDeleteOneClick = async (id: string | number) => {
-        await databaseService.getInstance().deleteById(id);
+        await deleteById(db!, id);
         setLogs(logs.filter((log) => log.id !== id));
     }
 

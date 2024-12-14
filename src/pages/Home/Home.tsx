@@ -5,7 +5,7 @@ import { Course } from "../../lib/interfaces";
 import { RefresherEventDetail } from "@ionic/core";
 import { createOutline, trashOutline } from "ionicons/icons";
 import { useUserStore } from "../../hooks/useUserStore";
-import databaseService from "../../services/databaseService";
+import { useDatabaseContext } from "../../hooks/useDatabaseContext";
 
 export function Home() {
 
@@ -23,12 +23,11 @@ export function Home() {
 
     const [showToast] = useIonToast();
 
+    const { db, addLog } = useDatabaseContext()!;
+
     useIonViewWillEnter(() => {
-
-        databaseService.getInstance().addLog("Courses page loaded", "courses page loaded successfully");
-
         courseService.getCourses()
-            .then(res => setCourses(res))
+            .then(res => {setCourses(res); return addLog(db!, "Courses page loaded", "courses page loaded successfully")})
             .then(() => setTimeout(() => { setLoading(false) }, 2000));
     }, []);
 
