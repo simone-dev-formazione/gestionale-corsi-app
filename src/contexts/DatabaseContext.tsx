@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { CapacitorSQLite, SQLiteConnection, SQLiteDBConnection } from "@capacitor-community/sqlite";
 import { LogEntry } from '../lib/types';
+import { isPlatform } from '@ionic/react';
 
 type DatabaseContextProps = {
     db?: SQLiteDBConnection;
@@ -17,7 +18,9 @@ export const DatabaseProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     const [db, setDb] = useState<SQLiteDBConnection | undefined>(undefined);
 
     useEffect(() => {
-        initializeDatabase()
+        if(isPlatform('mobile')){
+            initializeDatabase()
+        }
     }, []);
 
     const initializeDatabase = async () => {

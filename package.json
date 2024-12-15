@@ -11,7 +11,7 @@
     "test.unit": "vitest",
     "lint": "eslint",
     "android": "ionic capacitor copy && ionic capacitor run android --livereload --external",
-    "ios": "ionic capacitor copy && ionic capacitor run ios --livereload --external" 
+    "ios": "ionic capacitor copy && ionic capacitor run ios --livereload --external"
   },
   "dependencies": {
     "@capacitor-community/sqlite": "^6.0.2",
@@ -35,6 +35,7 @@
     "react-router": "^5.3.4",
     "react-router-dom": "^5.3.4",
     "swiper": "^11.1.15",
+    "zod": "^3.24.1",
     "zustand": "^5.0.1"
   },
   "devDependencies": {
