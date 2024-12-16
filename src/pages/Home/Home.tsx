@@ -6,7 +6,7 @@ import { RefresherEventDetail } from "@ionic/core";
 import { createOutline, trashOutline } from "ionicons/icons";
 import { useUserStore } from "../../hooks/useUserStore";
 // import DatabaseService from "../../services/databaseService";
-import { useDatabase } from "../../contexts/DatabaseContext";
+// import { useDatabase } from "../../contexts/DatabaseContext";
 
 export function Home() {
 
@@ -24,7 +24,7 @@ export function Home() {
 
     const [showToast] = useIonToast();
 
-    const { addLog } = useDatabase();
+    // const { addLog } = useDatabase();
 
     useIonViewWillEnter(() => {
         courseService.getCourses()

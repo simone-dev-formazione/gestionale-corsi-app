@@ -2,11 +2,11 @@ import { IonButtons, IonContent, IonHeader, IonItem, IonMenuButton, IonPage, Ion
 import React, { useState } from 'react';
 import { Preferences } from '@capacitor/preferences';
 import { useDarkMode } from '../../hooks/useDarkMode';
-import { useDatabase } from '../../contexts/DatabaseContext';
+// import { useDatabase } from '../../contexts/DatabaseContext';
 
 const Tab2: React.FC = () => {
 
-    const { addLog } = useDatabase();
+    // const { addLog } = useDatabase();
 
     const { checkDarkMode, toggleDarkMode } = useDarkMode();
 
@@ -16,9 +16,9 @@ const Tab2: React.FC = () => {
         setDarkState(checkDarkMode());
     });
 
-    useIonViewDidEnter(() => {
-        addLog?.("Settings page entered", "Take Photo page entered successfully");
-    });
+    // useIonViewDidEnter(() => {
+    //     addLog?.("Settings page entered", "Take Photo page entered successfully");
+    // });
 
     const handleToggle = async () => {
         if (!darkState) {

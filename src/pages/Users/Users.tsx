@@ -4,7 +4,7 @@ import AdminService from '../../services/adminService';
 import { User } from '../../lib/interfaces';
 import { useIonViewWillEnter } from '@ionic/react';
 // import DatabaseService from '../../services/databaseService';
-import { useDatabase } from '../../contexts/DatabaseContext';
+// import { useDatabase } from '../../contexts/DatabaseContext';
 
 const Users: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(true);
@@ -13,7 +13,7 @@ const Users: React.FC = () => {
 
     const [results, setResults] = useState<User[]>([]);
 
-    const { addLog } = useDatabase();
+    // const { addLog } = useDatabase();
 
     useIonViewWillEnter(() => {
         AdminService.getUsers()
@@ -22,9 +22,9 @@ const Users: React.FC = () => {
 
     }, []);
 
-    useIonViewDidEnter(() => {
-        addLog?.("Users page entered", "Users page entered successfully");
-    })
+    // useIonViewDidEnter(() => {
+    //     addLog?.("Users page entered", "Users page entered successfully");
+    // })
 
     const handleInput = (ev: Event) => {
         const target = ev.target as HTMLIonSearchbarElement;

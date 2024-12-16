@@ -8,8 +8,8 @@ import { useUserStore } from './hooks/useUserStore';
 import { useEffect } from 'react';
 import { Preferences } from '@capacitor/preferences';
 import { useDarkMode } from './hooks/useDarkMode';
-// import DatabaseService from './services/databaseService';
-import { DatabaseProvider } from './contexts/DatabaseContext';
+import DatabaseService from './services/databaseService';
+// import { DatabaseProvider } from './contexts/DatabaseContext';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -55,7 +55,9 @@ const App: React.FC = () => {
 
   useEffect(() => {
 
-    // DatabaseService.getInstance().initializeDatabase();
+    if(isPlatform('mobile')) {
+      DatabaseService.getInstance().initializeDatabase();
+    }
 
     // setInterval(() => {console.log('Syncing...');
     // }, 1000);
@@ -75,11 +77,11 @@ const App: React.FC = () => {
 
   return (
     <IonApp>
-      <DatabaseProvider>
+      {/* <DatabaseProvider> */}
         <IonReactRouter>
           <IonRouterOutlet>
             <Route exact path="/" render={() =>
-              !user ? <Login /> : <Redirect to={'/app'} />
+              user === undefined ? <div>loading...</div> : !user ? <Login /> : <Redirect to={'/app'} />
             } />
             <Route exact path="/register" component={Register} />
             <Route path='/app' render={(props) =>
@@ -87,7 +89,7 @@ const App: React.FC = () => {
             } />
           </IonRouterOutlet>
         </IonReactRouter>
-      </DatabaseProvider>
+      {/* </DatabaseProvider> */}
     </IonApp>
   )
 };

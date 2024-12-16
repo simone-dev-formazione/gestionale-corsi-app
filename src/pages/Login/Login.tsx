@@ -1,4 +1,4 @@
-import { IonButton, IonCard, IonCardContent, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonImg, IonInput, IonInputPasswordToggle, IonPage, IonRow, IonTitle, IonToolbar, useIonViewWillLeave } from "@ionic/react";
+import { IonButton, IonCard, IonCardContent, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonImg, IonInput, IonInputPasswordToggle, IonPage, IonRow, IonTitle, IonToolbar, useIonViewWillEnter, useIonViewWillLeave } from "@ionic/react";
 import { logInOutline, personCircleOutline } from 'ionicons/icons';
 import IonicLogo from '../../assets/images/ionic-logo.png'
 import { useIonRouter } from "@ionic/react";
@@ -9,10 +9,12 @@ import UserService from "../../services/userService";
 import { useUserStore } from "../../hooks/useUserStore";
 import { useIonToast } from "@ionic/react";
 import { LoginRequest } from "../../lib/interfaces";
+import { useEffect } from "react";
 
 export function Login() {
 
     const setLoggedInUser = useUserStore((state) => state.setLoggedInUser);
+    const user = useUserStore((state) => state.user);
 
     const [formData, setFormData] = useState<LoginRequest>({ email: '', password: '' })
 
@@ -48,6 +50,7 @@ export function Login() {
         }
 
         setTimeout(async () => {
+            setLoggedInUser(response as string);
             await dismiss();
             await showToast({
                 message: 'Login successfull',
@@ -55,7 +58,6 @@ export function Login() {
                 duration: 2000,
             });
             router.push('/app', 'forward');
-            setLoggedInUser(response as string);
         }, 2000);
     }
 
