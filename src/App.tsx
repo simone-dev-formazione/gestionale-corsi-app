@@ -59,9 +59,6 @@ const App: React.FC = () => {
       DatabaseService.getInstance().initializeDatabase();
     }
 
-    // setInterval(() => {console.log('Syncing...');
-    // }, 1000);
-
     Preferences.get({
       key: 'token'
     })
@@ -81,7 +78,7 @@ const App: React.FC = () => {
         <IonReactRouter>
           <IonRouterOutlet>
             <Route exact path="/" render={() =>
-              user === undefined ? <div>loading...</div> : !user ? <Login /> : <Redirect to={'/app'} />
+              !user ? <Login /> : <Redirect to={'/app'} />
             } />
             <Route exact path="/register" component={Register} />
             <Route path='/app' render={(props) =>

@@ -2,14 +2,13 @@ import { IonButton, IonCard, IonCardContent, IonCol, IonContent, IonGrid, IonHea
 import { logInOutline, personCircleOutline } from 'ionicons/icons';
 import IonicLogo from '../../assets/images/ionic-logo.png'
 import { useIonRouter } from "@ionic/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useIonLoading } from "@ionic/react";
 import { InputInputEventDetail, IonInputCustomEvent } from "@ionic/core";
 import UserService from "../../services/userService";
 import { useUserStore } from "../../hooks/useUserStore";
 import { useIonToast } from "@ionic/react";
 import { LoginRequest } from "../../lib/interfaces";
-import { useEffect } from "react";
 
 export function Login() {
 
@@ -57,7 +56,7 @@ export function Login() {
                 color: "success",
                 duration: 2000,
             });
-            router.push('/app', 'forward');
+            router.push('/app', 'root');
         }, 2000);
     }
 

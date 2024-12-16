@@ -10,7 +10,6 @@ import Users from "../Users/Users";
 import { useIonAlert } from "@ionic/react";
 import './Menu.css';
 import Logs from "../Logs/Logs";
-import { useEffect } from "react";
 
 export function Menu({ match }: RouteComponentProps) {
 
@@ -18,10 +17,6 @@ export function Menu({ match }: RouteComponentProps) {
 
     const user = useUserStore((state) => state.user);
     const unsetLoggedInUser = useUserStore((state) => state.unsetLoggedInUser);
-
-    // useEffect(() => {
-    //     router.push('/', 'root');
-    // }, [user]);
 
     const [showAlert] = useIonAlert();
 
@@ -39,7 +34,7 @@ export function Menu({ match }: RouteComponentProps) {
                     handler: async () => {
                         await AuthService.logOutUser();
                         unsetLoggedInUser();
-                        router.push('/', 'root');
+                        router.push('/', 'back');
                     }
                 }
             ]
