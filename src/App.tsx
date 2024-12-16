@@ -57,6 +57,9 @@ const App: React.FC = () => {
 
     // DatabaseService.getInstance().initializeDatabase();
 
+    // setInterval(() => {console.log('Syncing...');
+    // }, 1000);
+
     Preferences.get({
       key: 'token'
     })
