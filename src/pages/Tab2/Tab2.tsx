@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Preferences } from '@capacitor/preferences';
 import { useDarkMode } from '../../hooks/useDarkMode';
 // import { useDatabase } from '../../contexts/DatabaseContext';
+import DatabaseService from '../../services/databaseService';
 
 const Tab2: React.FC = () => {
 
@@ -27,6 +28,7 @@ const Tab2: React.FC = () => {
                 key: 'dark',
                 value: 'true'
             })
+            await DatabaseService.getInstance().addLog('Dark mode', 'Dark mode enabled');
         }
         else {
             setDarkState(toggleDarkMode(false));
@@ -34,6 +36,7 @@ const Tab2: React.FC = () => {
                 key: 'dark',
                 value: 'false'
             });
+            await DatabaseService.getInstance().addLog('Dark mode', 'Dark mode disabled');
         }
     }
 

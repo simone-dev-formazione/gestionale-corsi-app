@@ -1,27 +1,27 @@
-import { IonButton, IonButtons, IonCard, IonCardContent, IonChip, IonContent, IonHeader, IonIcon, IonItem, IonLabel, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonChip, IonContent, IonHeader, IonIcon, IonItem, IonLabel, IonMenuButton, IonPage, IonText, IonTitle, IonToolbar } from '@ionic/react';
 import React, { useState } from 'react';
 import { useIonViewWillEnter } from '@ionic/react';
 import { trashOutline } from 'ionicons/icons';
 import { LogEntry } from '../../lib/types';
-// import DatabaseService from '../../services/databaseService';
-import { useDatabase } from '../../contexts/DatabaseContext';
+import DatabaseService from '../../services/databaseService';
+// import { useDatabase } from '../../contexts/DatabaseContext';
 
 const Logs: React.FC = () => {
     const [logs, setLogs] = useState<LogEntry[]>([]);
 
-    const { loadLogs, deleteById, clearLogs } = useDatabase();
+    // const { loadLogs, deleteById, clearLogs } = useDatabase();
 
     useIonViewWillEnter(() => {
-        loadLogs?.().then((logs) => setLogs(logs));
+        DatabaseService.getInstance().loadLogs().then((logs) => setLogs(logs));
     });
 
     const handleDeleteAllClick = async () => {
-        await clearLogs?.();
+        await DatabaseService.getInstance().clearLogs?.();
         setLogs([]);
     };
 
     const handleDeleteOneClick = async (id: string | number) => {
-        await deleteById?.(id);
+        await DatabaseService.getInstance().deleteById?.(id);
         setLogs(logs.filter((log) => log.id !== id));
     }
 
@@ -50,13 +50,20 @@ const Logs: React.FC = () => {
                             <IonButton onClick={handleDeleteAllClick}>Delete all</IonButton>
                             {logs.map((log) => (
                                 <IonCard key={log.id}>
+                                    <IonCardHeader>
+                                        <IonCardTitle>{log.event}</IonCardTitle>
+                                    </IonCardHeader>
                                     <IonCardContent>
                                         <IonItem lines='none'>
+                                            <div>
+                                                <IonText>{log.details}</IonText>
+                                            </div>
+
                                             <IonLabel>
-                                                {log.event}
                                                 <p>{log.timestamp}</p>
                                             </IonLabel>
-                                            <IonIcon icon={trashOutline} onClick={() => handleDeleteOneClick(log.id)} />
+
+                                            <IonIcon className='ion-margin-start' icon={trashOutline} onClick={() => handleDeleteOneClick(log.id)} />
                                         </IonItem>
                                     </IonCardContent>
                                 </IonCard>
