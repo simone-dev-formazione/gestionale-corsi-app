@@ -10,6 +10,7 @@ import Users from "../Users/Users";
 import { useIonAlert } from "@ionic/react";
 import './Menu.css';
 import Logs from "../Logs/Logs";
+import { AuthorizedRoute } from "../../components/AuthorizedRoute";
 
 export function Menu({ match }: RouteComponentProps) {
 
@@ -97,10 +98,16 @@ export function Menu({ match }: RouteComponentProps) {
                 <IonRouterOutlet id="main">
                     <Route exact path={`${match.url}/list`} component={Home} />
                     <Route path={`${match.url}/settings`} component={Settings} />
-                    <Route exact path={`${match.url}/admin/users`} render={() =>
-                        user?.role === 'admin' ? <Users /> : <Redirect to={`${match.url}`} />
-                    } />
-                    <Route exact path={`${match.url}/admin/logs`} component={Logs} />
+                    <Route exact path={`${match.url}/admin/users`}>
+                        <AuthorizedRoute unauthorizedRedirectTo={`${match.url}`}>
+                            <Users />
+                        </AuthorizedRoute>
+                    </Route>
+                    <Route exact path={`${match.url}/admin/logs`}>
+                        <AuthorizedRoute unauthorizedRedirectTo={`${match.url}`}>
+                            <Logs />
+                        </AuthorizedRoute>
+                    </Route>
                     <Route exact path={`${match.url}`}>
                         <Redirect to={`${match.url}/list`} />
                     </Route>

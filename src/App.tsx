@@ -1,5 +1,5 @@
 import { Redirect, Route } from 'react-router-dom';
-import { IonApp, IonRouterOutlet, isPlatform, setupIonicReact } from '@ionic/react';
+import { IonApp, IonRouterOutlet, isPlatform, setupIonicReact, useIonRouter } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import { Login } from './pages/Login/Login';
 import { Register } from './pages/Register/Register';
@@ -10,6 +10,8 @@ import { Preferences } from '@capacitor/preferences';
 import { useDarkMode } from './hooks/useDarkMode';
 import DatabaseService from './services/databaseService';
 // import { DatabaseProvider } from './contexts/DatabaseContext';
+// import { setupNotifications } from './services/notificationService';
+import NotificationHandler from './components/NotificationHandler';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -50,10 +52,13 @@ const App: React.FC = () => {
 
   const { toggleDarkMode } = useDarkMode();
 
+  const router = useIonRouter()
+
   const user = useUserStore((state) => state.user);
   const setLoggedInUser = useUserStore((state) => state.setLoggedInUser);
 
   useEffect(() => {
+    // setupNotifications();
 
     if(isPlatform('mobile')) {
       DatabaseService.getInstance().initializeDatabase();
@@ -76,6 +81,7 @@ const App: React.FC = () => {
     <IonApp>
       {/* <DatabaseProvider> */}
         <IonReactRouter>
+          <NotificationHandler />
           <IonRouterOutlet>
             <Route exact path="/" render={() =>
               !user ? <Login /> : <Redirect to={'/app'} />

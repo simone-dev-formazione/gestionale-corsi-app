@@ -17,7 +17,7 @@ class CourseService {
                 url: platformService.getBaseAddressForPlatform() + 'api/courses',
                 headers: {
                     'Authorization': 'Bearer ' + token
-                }
+                },
             });
     
             if(!result || !result.data){
