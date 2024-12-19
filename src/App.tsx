@@ -81,7 +81,7 @@ const App: React.FC = () => {
     <IonApp>
       {/* <DatabaseProvider> */}
         <IonReactRouter>
-          <NotificationHandler />
+          {/* <NotificationHandler /> */}
           <IonRouterOutlet>
             <Route exact path="/" render={() =>
               !user ? <Login /> : <Redirect to={'/app'} />
